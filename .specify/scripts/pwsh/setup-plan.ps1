@@ -21,7 +21,7 @@ if (-not (Test-Path $FEATURE_DIR)) {
     New-Item -ItemType Directory -Path $FEATURE_DIR -Force | Out-Null
 }
 
-$template = Join-Path $REPO_ROOT ".specify	emplates\plan-template.md"
+$template = Join-Path $REPO_ROOT ".specify\templates\emplates\plan-template.md"
 if (Test-Path $template -PathType Leaf) {
     Copy-Item -Path $template -Destination $IMPL_PLAN -Force
     if (-not $Json) { Write-Host "Copied plan template to $IMPL_PLAN" }
