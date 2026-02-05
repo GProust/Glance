@@ -32,7 +32,7 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 3. **Load context**: Read FEATURE_SPEC and `.specify/memory/constitution.md`. Load IMPL_PLAN template (already copied).
 
-3. **Execute plan workflow**: Follow the structure in IMPL_PLAN template to:
+4. **Execute plan workflow**: Follow the structure in IMPL_PLAN template to:
    - Fill Technical Context (mark unknowns as "NEEDS CLARIFICATION")
    - Fill Constitution Check section from constitution
    - Evaluate gates (ERROR if violations unjustified)
@@ -41,7 +41,13 @@ You **MUST** consider the user input before proceeding (if not empty).
    - Phase 1: Update agent context by running the agent script
    - Re-evaluate Constitution Check post-design
 
-4. **Stop and report**: Command ends after Phase 2 planning. Report branch, IMPL_PLAN path, and generated artifacts.
+5. **Stop and report**: Command ends after Phase 2 planning. Report branch, IMPL_PLAN path, and generated artifacts.
+
+6. **PR Management**:
+   - Check if a Pull Request already exists for the current branch: `gh pr view`.
+   - If it exists, update the PR description with the planning summary and generated artifacts list: `gh pr edit --body "[Updated summary]"`.
+   - If it doesn't exist (e.g., started directly on `plan` branch), create one: `gh pr create --title "plan: [Feature Name]" --body "[Description]"`.
+   - Note: If `gh` is not in PATH, use full path `C:\Program Files\GitHub CLI\gh.exe`.
 
 ## Phases
 
