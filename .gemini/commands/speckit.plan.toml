@@ -43,6 +43,12 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 5. **Stop and report**: Command ends after Phase 2 planning. Report branch, IMPL_PLAN path, and generated artifacts.
 
+6. **PR Management**:
+   - Check if a Pull Request already exists for the current branch: `gh pr view`.
+   - If it exists, update the PR description with the planning summary and generated artifacts list: `gh pr edit --body "[Updated summary]"`.
+   - If it doesn't exist (e.g., started directly on `plan` branch), create one: `gh pr create --title "plan: [Feature Name]" --body "[Description]"`.
+   - Note: If `gh` is not in PATH, use full path `C:\Program Files\GitHub CLI\gh.exe`.
+
 ## Phases
 
 ### Phase 0: Outline & Research

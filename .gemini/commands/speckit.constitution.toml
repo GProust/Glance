@@ -76,6 +76,12 @@ Follow this execution flow:
    - Any files flagged for manual follow-up.
    - Suggested commit message (e.g., `docs: amend constitution to vX.Y.Z (principle additions + governance update)`).
 
+10. **PR Management**:
+    - Check if a Pull Request already exists for the current branch: `gh pr view`.
+    - If it exists, update the PR description with the constitution update summary and version bump: `gh pr edit --body "[Updated governance summary]"`.
+    - If it doesn't exist, create one: `gh pr create --title "docs: update constitution to v[X.Y.Z]" --body "[Description]"`.
+    - Note: If `gh` is not in PATH, use full path `C:\Program Files\GitHub CLI\gh.exe`.
+
 Formatting & Style Requirements:
 
 - Use Markdown headings exactly as in the template (do not demote/promote levels).
