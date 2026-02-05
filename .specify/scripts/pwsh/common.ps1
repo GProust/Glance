@@ -61,9 +61,14 @@ function Confirm-FeatureBranch {
         return $true
     }
 
+    $dedicatedBranches = @("specifications", "plan", "constitution")
+    if ($dedicatedBranches -contains $branch) {
+        return $true
+    }
+
     if ($branch -notmatch '^[0-9]{3}-') {
         Write-Error "ERROR: Not on a feature branch. Current branch: $branch"
-        Write-Host "Feature branches should be named like: 001-feature-name" -ForegroundColor Yellow
+        Write-Host "Feature branches should be named like: 001-feature-name or one of: $($dedicatedBranches -join ', ')" -ForegroundColor Yellow
         return $false
     }
 
