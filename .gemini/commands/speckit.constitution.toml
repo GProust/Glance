@@ -23,6 +23,11 @@ You are updating the project constitution at `.specify/memory/constitution.md`. 
 
 Follow this execution flow:
 
+0. **Branch Management**:
+   - Run `git branch --show-current` to check the current branch.
+   - If not on `constitution` and not on a feature branch, switch to or create the `constitution` branch: `git checkout -b constitution` (or `git checkout constitution` if it exists).
+   - This ensures all governance/constitution work stays on a single dedicated branch.
+
 1. Load the existing constitution template at `.specify/memory/constitution.md`.
    - Identify every placeholder token of the form `[ALL_CAPS_IDENTIFIER]`.
    **IMPORTANT**: The user might require less or more principles than the ones used in the template. If a number is specified, respect that - follow the general template. You will update the doc accordingly.

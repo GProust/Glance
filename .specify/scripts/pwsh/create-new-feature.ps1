@@ -4,6 +4,7 @@ param(
     [switch]$Json,
     [string]$ShortName,
     [int]$Number,
+    [string]$TargetBranch,
     [Parameter(ValueFromRemainingArguments=$true)]
     [string[]]$DescriptionParts
 )
@@ -103,7 +104,17 @@ if ($branchName.Length -gt 244) {
 }
 
 if (Test-HasGit) {
-    git checkout -b $branchName
+    if ($TargetBranch) {
+        # Check if target branch exists, if not create it
+        $existing = git branch --list $TargetBranch
+        if (-not $existing) {
+            git checkout -b $TargetBranch
+        } else {
+            git checkout $TargetBranch
+        }
+    } else {
+        git checkout -b $branchName
+    }
 } else {
     Write-Warning "[specify] Warning: Git repository not detected; skipped branch creation"
 }
