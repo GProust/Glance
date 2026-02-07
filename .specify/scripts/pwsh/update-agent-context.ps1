@@ -43,7 +43,7 @@ $techStack = @($newLang, $newFramework) | Where-Object { $_ } | Join-String -Sep
 function Update-AgentFile {
     param($path, $name)
     if (-not (Test-Path $path)) {
-        $template = Join-Path $REPO_ROOT ".specify	emplates\agent-file-template.md"
+        $template = Join-Path $REPO_ROOT ".specify\templates\emplates\agent-file-template.md"
         if (Test-Path $template) {
             $content = Get-Content $template -Raw
             $content = $content -replace '\[PROJECT NAME\]', (Split-Path $REPO_ROOT -Leaf)
@@ -54,7 +54,7 @@ function Update-AgentFile {
             $dir = Split-Path $path
             if (-not (Test-Path $dir)) { New-Item -ItemType Directory -Path $dir -Force | Out-Null }
             $content | Set-Content $path -Force
-            Write-Host "✓ Created new $name context file" -ForegroundColor Green
+            Write-Host "✁ECreated new $name context file" -ForegroundColor Green
         }
     } else {
         $content = Get-Content $path
@@ -86,7 +86,7 @@ function Update-AgentFile {
         }
         
         $newContent | Set-Content $path -Force
-        Write-Host "✓ Updated existing $name context file" -ForegroundColor Green
+        Write-Host "✁EUpdated existing $name context file" -ForegroundColor Green
     }
 }
 
@@ -94,7 +94,8 @@ $agents = @{
     "claude" = Join-Path $REPO_ROOT "CLAUDE.md"
     "gemini" = Join-Path $REPO_ROOT "GEMINI.md"
     "copilot" = Join-Path $REPO_ROOT ".github\agents\copilot-instructions.md"
-    "cursor-agent" = Join-Path $REPO_ROOT ".cursorules\specify-rules.mdc"
+    "cursor-agent" = Join-Path $REPO_ROOT ".cursor
+ules\specify-rules.mdc"
 }
 
 if ($AgentType) {

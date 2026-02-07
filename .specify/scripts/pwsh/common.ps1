@@ -132,17 +132,17 @@ function Get-FeaturePaths {
 function Show-FileStatus {
     param($path, $label)
     if (Test-Path $path -PathType Leaf) {
-        Write-Host "  ✓ $label" -ForegroundColor Green
+        Write-Host "  ✁E$label" -ForegroundColor Green
     } else {
-        Write-Host "  ✗ $label" -ForegroundColor Red
+        Write-Host "  ✁E$label" -ForegroundColor Red
     }
 }
 
 function Show-DirStatus {
     param($path, $label)
     if (Test-Path $path -PathType Container -and (Get-ChildItem $path).Count -gt 0) {
-        Write-Host "  ✓ $label" -ForegroundColor Green
+        Write-Host "  ✁E$label" -ForegroundColor Green
     } else {
-        Write-Host "  ✗ $label" -ForegroundColor Red
+        Write-Host "  ✁E$label" -ForegroundColor Red
     }
 }

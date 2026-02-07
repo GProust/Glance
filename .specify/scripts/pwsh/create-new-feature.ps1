@@ -122,7 +122,7 @@ if (Test-HasGit) {
 $featureDir = Join-Path $specsDir $branchName
 New-Item -ItemType Directory -Path $featureDir -Force | Out-Null
 
-$template = Join-Path $repoRoot ".specify	emplates\spec-template.md"
+$template = Join-Path $repoRoot ".specify\templates\emplates\spec-template.md"
 $specFile = Join-Path $featureDir "spec.md"
 
 if (Test-Path $template) {
