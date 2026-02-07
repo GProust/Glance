@@ -128,8 +128,8 @@ You **MUST** consider the user input before proceeding (if not empty).
    - "Are the exact number and layout of featured episodes specified?" [Completeness]
    - "Is 'prominent display' quantified with specific sizing/positioning?" [Clarity]
    - "Are hover state requirements consistent across all interactive elements?" [Consistency]
-   - "Are keyboard navigation requirements defined for all interactive UI?" [Coverage]
-   - "Is the fallback behavior specified when logo image fails to load?" [Edge Cases]
+   - "Are accessibility requirements defined for keyboard navigation?" [Coverage]
+   - "Does the spec define what happens when logo image fails to load?" [Edge Cases]
    - "Are loading states defined for asynchronous episode data?" [Completeness]
    - "Does the spec define visual hierarchy for competing UI elements?" [Clarity]
 
