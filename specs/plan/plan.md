@@ -14,6 +14,7 @@ This plan outlines the foundational architecture and data model for the Glance p
 **Storage**: PostgreSQL (Supabase/OrioleDB)  
 **Testing**: Vitest (Unit + Mocks), Playwright/Detox (E2E Mocks)  
 **API Strategy**: OpenAPI v3.1, RESTful endpoints
+**Diagrams**: Mermaid.js (Sequence, User Journey, Data Model)
 **Target Platform**: Web, iOS, Android, Linux Server  
 **Project Type**: Multi-module
 **Performance Goals**: < 200ms API response time, support for 10k+ concurrent users.
@@ -26,7 +27,8 @@ This plan outlines the foundational architecture and data model for the Glance p
 
 - [x] **Modularity**: Backend, Web, and Mobile concerns are strictly separated.
 - [x] **Stack Compliance**: Uses Node, React, RN, Supabase, PostgreSQL.
-- [x] **API Standards**: OpenAPI v3.1 planned for all endpoints.
+- [x] **API Standards**: Is OpenAPI planned? Are breaking changes identified?
+- [x] **Diagrams**: Are Mermaid.js Sequence, User Journey, and Data Model diagrams included?
 - [x] **Security**: Clerk for auth, environment variables for secrets.
 - [x] **Testing**: Vitest and E2E with mocks planned.
 
@@ -39,6 +41,8 @@ specs/plan/
 ├── plan.md              # This file
 ├── research.md          # Technology and pattern research
 ├── data-model.md        # Global Supabase schema and entity relationships
+├── user-journey.md      # User journey map (Mermaid)
+├── sequence.md          # Ingestion pipeline flow (Mermaid)
 ├── quickstart.md        # Environment setup and developer onboarding
 └── contracts/           # OpenAPI definitions
 ```

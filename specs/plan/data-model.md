@@ -1,5 +1,59 @@
 # Data Model: Glance Global Schema
 
+## ER Diagram
+
+```mermaid
+erDiagram
+    USERS ||--o{ SOURCES : "owns"
+    SOURCES ||--o{ CONTENT_ITEMS : "contains"
+    SOURCES }|--o{ SOURCE_TAGS : "labeled with"
+    TAGS ||--o{ SOURCE_TAGS : "associated with"
+
+    USERS {
+        uuid id PK
+        string email
+        timestamp created_at
+    }
+
+    SOURCES {
+        uuid id PK
+        uuid user_id FK
+        string type
+        string provider
+        string display_name
+        boolean is_active
+        interval recurrence_interval
+        jsonb config
+        timestamp last_fetched_at
+    }
+
+    CONTENT_ITEMS {
+        uuid id PK
+        uuid source_id FK
+        string external_id
+        text origin_url
+        text title
+        text summary
+        text raw_content
+        timestamp published_at
+        timestamp fetched_at
+        int trust_level
+        boolean is_ai_generated
+        jsonb metadata
+    }
+
+    TAGS {
+        uuid id PK
+        string name
+        boolean is_global
+    }
+
+    SOURCE_TAGS {
+        uuid source_id FK
+        uuid tag_id FK
+    }
+```
+
 ## Overview
 The schema is designed for high extensibility using a "Core + Metadata" approach. Common fields are promoted to top-level columns, while provider-specific data is stored in JSONB fields.
 
