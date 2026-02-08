@@ -51,6 +51,52 @@ As a user, I want to see a specific list of pending items (Open Issues and PRs) 
 1. **Given** an imported repository, **When** I request pending items, **Then** the system should display a list of Issues and PRs that are currently open.
 2. **Given** an imported repository, **When** I request pending items, **Then** the list should be sortable by creation date or update date to highlight stale vs. new items.
 
+---
+
+## Visual Journeys *(mandatory)*
+
+### User Journey Diagram
+
+```mermaid
+journey
+    title GitHub Insight Flow
+    section Setup
+      Provide Repo URL: 5: User
+      Validate Access: 4: System
+    section Data Fetch
+      Import Issues/PRs: 3: System
+      Confirm Completion: 5: System
+    section Analysis
+      Request AI Summary: 5: User
+      Read Summary: 5: User
+      Review Pending Items: 4: User
+```
+
+### Sequence Diagram: Metadata Import
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant B as Backend
+    participant GH as GitHub API
+    participant DB as Database
+
+    U->>B: POST /api/repos/import {url}
+    B->>GH: GET /repos/{owner}/{repo} (Check exists)
+    GH-->>B: 200 OK
+    B->>DB: Create Repo Record (Pending)
+    B->>GH: GET /repos/.../issues?per_page=100
+    loop Pagination
+        GH-->>B: Page of Issues/PRs
+        B->>DB: Upsert Issue/PR Records
+    end
+    B->>GH: GET /repos/.../releases
+    GH-->>B: List of Releases
+    B->>DB: Upsert Release Records
+    B->>DB: Mark Repo as Imported
+    B-->>U: Import Successful
+```
+
 ### Edge Cases
 
 - **Rate Limiting**: What happens if GitHub API rate limits are hit during import? (System should pause/retry or fail gracefully with specific message).

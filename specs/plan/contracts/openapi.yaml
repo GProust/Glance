@@ -1,0 +1,86 @@
+openapi: 3.1.0
+info:
+  title: Glance API
+  description: API for the Glance AI-driven insights platform.
+  version: 1.0.0
+
+servers:
+  - url: https://api.glance.ai/v1
+    description: Production server
+
+paths:
+  /sources:
+    get:
+      summary: List registered sources
+      responses:
+        '200':
+          description: A list of sources
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Source'
+    post:
+      summary: Register a new source
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SourceCreate'
+      responses:
+        '201':
+          description: Source created
+
+  /feed:
+    get:
+      summary: Get aggregated content feed
+      parameters:
+        - name: type
+          in: query
+          schema:
+            type: string
+            enum: [REPO, NEWS, SOCIAL, ALL]
+          default: ALL
+      responses:
+        '200':
+          description: A list of content items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ContentItem'
+
+components:
+  schemas:
+    Source:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        type: { type: string, enum: [REPO, NEWS, SOCIAL] }
+        provider: { type: string }
+        display_name: { type: string }
+        is_active: { type: boolean }
+        config: { type: object }
+
+    SourceCreate:
+      type: object
+      required: [type, provider, config]
+      properties:
+        type: { type: string, enum: [REPO, NEWS, SOCIAL] }
+        provider: { type: string }
+        config: { type: object }
+
+    ContentItem:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        origin_url: { type: string }
+        title: { type: string }
+        summary: { type: string }
+        published_at: { type: string, format: date-time }
+        trust_level: { type: integer, minimum: 0, maximum: 100 }
+        is_ai_generated: { type: boolean }
+        metadata: { type: object }

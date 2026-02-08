@@ -61,6 +61,40 @@ As a user, I want the interface to adapt based on the system I'm interacting wit
 
 ---
 
+## Visual Journeys *(mandatory)*
+
+### User Journey Diagram
+
+```mermaid
+journey
+    title Multi-System Connector Flow
+    section Setup
+      Select System Type: 5: User
+      Connect Account: 4: User
+      Authorize App: 5: User
+    section Interaction
+      View Unified Feed: 5: User
+      Perform System Action: 4: User
+      Syncing New Items: 3: System
+```
+
+### Sequence Diagram: Modular Connector Registration
+
+```mermaid
+sequenceDiagram
+    participant D as Developer
+    participant C as Core Orchestrator
+    participant N as New Connector Module
+    participant UI as Admin UI
+
+    D->>N: Implement IConnector Interface
+    D->>C: Register Connector(N)
+    C->>UI: Update Connection Options
+    UI->>U: Display New Platform Logo
+```
+
+---
+
 ### Edge Cases
 
 - **Auth Expiration**: How does the system handle a single system's token expiring without affecting others?
