@@ -68,6 +68,50 @@ As a Mobile User, I want to scroll through a feed of summarized articles and rep
 2. **Given** a summary card, **When** tapped, **Then** it shows the full summary, credibility score, AI tags, and a link to the original source.
 3. **Given** the mobile interface, **When** I try to edit or delete content, **Then** no option exists (Read-Only).
 
+---
+
+## Visual Journeys *(mandatory)*
+
+### User Journey Diagram
+
+```mermaid
+journey
+    title Admin & Mobile Flow
+    section Admin
+      Add News Source: 5: Admin
+      Configure Tags: 4: Admin
+    section System
+      Fetch Content: 3: System
+      AI Enrichment: 4: System
+    section Mobile
+      Open App: 5: User
+      View Feed: 5: User
+      Read Summary: 5: User
+```
+
+### Sequence Diagram: AI Enrichment Pipeline
+
+```mermaid
+sequenceDiagram
+    participant S as Source (RSS/X/LI)
+    participant B as Backend
+    participant AI as AI Engine
+    participant DB as Database
+    participant M as Mobile App
+
+    B->>S: Fetch Raw Content
+    S-->>B: Content List
+    loop For each item
+        B->>AI: Request Summary & Score
+        AI-->>B: Summary, Score, AI-Tag
+        B->>DB: Store Enriched Article
+    end
+    M->>B: GET /api/feed
+    B->>DB: Query Latest
+    DB-->>B: Enriched Items
+    B-->>M: Aggregated Feed
+```
+
 ### Edge Cases
 
 - **Source API Limitations**: X/LinkedIn APIs often have strict rate limits or high costs. (Assumption: We will use official APIs or supported scraping methods where legally/technically viable, handling rate limits gracefully).

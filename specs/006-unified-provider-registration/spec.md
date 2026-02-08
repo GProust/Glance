@@ -52,6 +52,47 @@ As a power user, I want to set how often the system checks for new updates on ea
 
 ---
 
+## Visual Journeys *(mandatory)*
+
+### User Journey Diagram
+
+```mermaid
+journey
+    title Source Registration Flow
+    section Navigation
+      Access Config Page: 5: User
+    section Selection
+      Choose Provider Type: 5: User
+    section Configuration
+      Enter Provider Details: 4: User
+      Define Sync Recurrence: 4: User
+      Specify Tags/Accounts: 5: User
+    section Confirmation
+      Validate Source: 4: System
+      Confirm Success: 5: System
+```
+
+### Sequence Diagram: Unified Source Registration
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant W as Web Admin
+    participant B as Backend
+    participant DB as Database
+
+    U->>W: Select Provider (e.g., RSS)
+    W->>U: Show RSS-specific fields (URL, Tags)
+    U->>W: Submit Configuration
+    W->>B: POST /api/v1/sources {config}
+    B->>B: Validate Source Connection
+    B->>DB: Save SourceRegistration & SourceConfig
+    B-->>W: 201 Created
+    W-->>U: Source Added Successfully
+```
+
+---
+
 ### Edge Cases
 
 - **Invalid Source URL**: How does the system handle an unreachable RSS feed or a non-existent GitHub repository during registration?
