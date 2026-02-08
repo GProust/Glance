@@ -1,8 +1,8 @@
-description = "Merge the current feature branch into master, push to remote, and clean up local and remote branches."
+description = "Clean up the feature development cycle by merging branches and removing local/remote feature branches."
 
-prompt = """
+prompt = '''
 ---
-description: Merge the current feature branch into master, push to remote, and clean up local and remote branches.
+description: Clean up the feature development cycle by merging branches and removing local/remote feature branches.
 ---
 
 ## User Input
@@ -15,28 +15,20 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 ## Outline
 
-1. **Identify current branch**:
-   - Run `git branch --show-current` to get the current branch name.
-   - Run `.specify/scripts/pwsh/check-prerequisites.ps1 -Json` to ensure we are in a valid state.
+1. **Verify environment**:
+   - Ensure the current branch is a feature branch (starts with a number like `001-`).
+   - Run `git branch --show-current` to confirm.
 
-2. **Validation**:
-   - If current branch is `master` or `main`, **STOP** and error: "Already on master/main branch."
-   - Check if there are uncommitted changes: `git status --porcelain`.
-   - If there are changes, ask the user to commit or stash them before finishing.
+2. **Check PR status**:
+   - Run `gh pr view --json state,mergedAt,baseRefName`.
+   - If the PR is not merged, warn the user and ask for confirmation before proceeding.
 
-3. **Merge Workflow**:
-   - Switch to master: `git checkout master`
-   - Pull latest master: `git pull origin master`
-   - Merge feature branch: `git merge <feature-branch>`
-   - If merge fails (conflicts), **STOP** and ask the user to resolve conflicts.
-   - Push to remote: `git push origin master`
+3. **Merge and cleanup**:
+   - Switch to the base branch (usually `main` or `develop`).
+   - Pull latest changes.
+   - If not already merged via GitHub, merge the feature branch locally.
+   - Delete the local feature branch: `git branch -d [branch-name]`.
+   - Delete the remote feature branch: `git push origin --delete [branch-name]`.
 
-4. **Cleanup**:
-   - Delete local feature branch: `git branch -d <feature-branch>`
-     - If it fails because not fully merged (shouldn't happen after push), ask for confirmation to use `-D`.
-   - Delete remote feature branch: `git push origin --delete <feature-branch>`
-   - Prune remote-tracking branches: `git fetch -p`
-
-5. **Report**:
-   - Report success and that the repository is now on master and cleaned up.
-"""
+4. **Report**: Confirm cleanup complete and list deleted branches.
+'''
