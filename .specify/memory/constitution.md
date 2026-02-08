@@ -1,14 +1,14 @@
 <!-- Sync Impact Report
-Version: 2.1.0 -> 2.2.0
+Version: 2.2.0 -> 2.3.0
 Modified Principles:
-  - Added VI. API Lifecycle & Documentation
+  - Added VII. Visual Specification & Diagrams
 Added Sections:
-  - API Lifecycle & Documentation (Core Principle)
-  - Operational Standards > Documentation (Refined)
+  - Visual Specification & Diagrams (Core Principle)
 Templates requiring updates:
-  - .specify/templates/plan-template.md: ✅ updated (API strategy)
-  - .specify/templates/spec-template.md: ✅ updated (API changes section)
-  - .specify/templates/tasks-template.md: ✅ updated (OpenAPI tasks)
+  - .specify/templates/plan-template.md: ✅ updated (Diagrams check)
+  - .specify/templates/spec-template.md: ✅ updated (User Journey diagrams)
+  - .specify/templates/tasks-template.md: ✅ updated (Diagrams task)
+  - .gemini/commands/speckit.plan.toml: ✅ updated (Phase 1 artifacts)
 -->
 
 # Glance Constitution
@@ -43,13 +43,21 @@ Deliver features in small, independently testable increments. "Big bang" release
 - **Versioning**: Breaking changes trigger a MAJOR version update.
 - **Deprecation**: Endpoints MUST NOT be removed immediately. They must be marked deprecated for at least 1-2 minor versions to allow client migration before removal.
 
+### VII. Visual Specification & Diagrams
+Complex logic and structures MUST be visually represented to ensure architectural alignment.
+- **Tooling**: All diagrams MUST be authored using **Mermaid.js** syntax for version control compatibility and rendering on GitHub/GitLab.
+- **Mandatory Diagrams**: Every implementation plan MUST include:
+  - **Sequence Diagrams**: For complex multi-step flows or inter-module communication.
+  - **User Journey**: To visualize the path a user takes through the feature.
+  - **Data Model**: For all schema changes or new entity relationships.
+
 ## Operational Standards
 
 ### Code Quality
 Code must be readable, idiomatic to the target language (JS/TS), and secure by design. Comments should explain "why", not "what".
 
 ### Documentation
-Documentation should be treated as a first-class citizen. READMEs, Specs, Plans, and **OpenAPI definitions** must be kept synchronous with code changes.
+Documentation should be treated as a first-class citizen. READMEs, Specs, Plans, **OpenAPI definitions**, and **Mermaid diagrams** must be kept synchronous with code changes.
 
 ### Code Review Standards
 Every task or PR must pass a 4-point review before merging:
@@ -69,4 +77,4 @@ This constitution serves as the primary guidance for architectural and process d
   - **Patch**: Clarifications, formatting, or minor refinements.
 - **Compliance**: All contributions are expected to align with these principles. Reviews should flag constitution violations.
 
-**Version**: 2.2.0 | **Ratified**: 2026-02-01 | **Last Amended**: 2026-02-01
+**Version**: 2.3.0 | **Ratified**: 2026-02-01 | **Last Amended**: 2026-02-08

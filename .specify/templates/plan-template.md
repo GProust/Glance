@@ -22,6 +22,7 @@
 **Storage**: PostgreSQL (Supabase/OrioleDB)  
 **Testing**: Jest/Vitest (Unit + Mocks), Wiremock (E2E Mocks)  
 **API Strategy**: OpenAPI v3.1 (Mandatory Examples), SemVer for Breaking Changes
+**Diagrams**: Mermaid.js (Sequence, User Journey, Data Model)
 **Target Platform**: Web, iOS, Android, Linux Server  
 **Project Type**: Multi-module (Backend/Web/Mobile)  
 **Performance Goals**: [domain-specific, e.g., 1000 req/s or NEEDS CLARIFICATION]  
@@ -35,6 +36,7 @@
 - [ ] **Modularity**: Are Backend, Web, and Mobile concerns separate?
 - [ ] **Stack Compliance**: Does it use Node, React, RN, Supabase?
 - [ ] **API Standards**: Is OpenAPI planned? Are breaking changes identified?
+- [ ] **Diagrams**: Are Mermaid.js Sequence, User Journey, and Data Model diagrams included?
 - [ ] **Security**: Are credentials externalized?
 - [ ] **Testing**: Is the Unit vs E2E (w/ Mocks) strategy defined?
 
@@ -47,6 +49,8 @@ specs/[###-feature]/
 ├── plan.md              # This file (/speckit.plan command output)
 ├── research.md          # Phase 0 output (/speckit.plan command)
 ├── data-model.md        # Phase 1 output (/speckit.plan command)
+├── user-journey.md      # Phase 1 output (/speckit.plan command)
+├── sequence.md          # Phase 1 output (/speckit.plan command)
 ├── quickstart.md        # Phase 1 output (/speckit.plan command)
 ├── contracts/           # Phase 1 output (/speckit.plan command)
 └── tasks.md             # Phase 2 output (/speckit.tasks command - NOT created by /speckit.plan)

@@ -63,7 +63,17 @@
 
 ---
 
-[Add more user stories as needed, each with an assigned priority]
+## Visual Journeys *(mandatory)*
+
+<!--
+  As per Constitution Principle VII, all complex flows must be visualized.
+  Use Mermaid.js syntax for all diagrams.
+-->
+
+### User Journey Diagram
+[Insert Mermaid.js journey diagram here]
+
+[Add more diagrams as needed, e.g., Sequence Diagrams for complex interactions]
 
 ### Edge Cases
 

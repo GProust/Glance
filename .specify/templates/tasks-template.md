@@ -150,6 +150,7 @@ Examples of foundational tasks (adjust based on your project):
 
 ## Phase N: Polish & Cross-Cutting Concerns
 
+- [ ] TXXX [P] Update Mermaid diagrams (Sequence, User Journey, Data Model) in specs/
 - [ ] TXXX [P] Documentation updates in docs/
 - [ ] TXXX Code cleanup and refactoring
 - [ ] TXXX Security hardening
