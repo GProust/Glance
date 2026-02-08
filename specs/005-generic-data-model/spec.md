@@ -51,6 +51,43 @@ As a system administrator, I want the data model to support any source provider 
 
 ---
 
+## Visual Journeys *(mandatory)*
+
+### User Journey Diagram
+
+```mermaid
+journey
+    title Generic Content Consumption
+    section Discovery
+      Open Dashboard: 5: User
+      Scan Multi-Source Feed: 5: User
+    section Interaction
+      View Unified Summary: 5: User
+      Check Trust Level: 4: User
+      Click Original Link: 5: User
+    section Tech Tracking
+      View Repository Health: 5: User
+      Compare PR/Issue Counts: 4: User
+```
+
+### Sequence Diagram: Generic Data Normalization
+
+```mermaid
+sequenceDiagram
+    participant P as Provider (GH/GL/RSS/X)
+    participant B as Backend
+    participant N as Normalizer
+    participant DB as Unified Schema
+
+    P-->>B: Provider-Specific JSON
+    B->>N: Normalize(JSON, ProviderType)
+    N-->>B: InformationItem or Repository Object
+    B->>DB: Upsert to Generic Table
+    DB-->>B: Success
+```
+
+---
+
 ### Edge Cases
 
 - **Missing Metadata**: What happens when a provider does not provide a specific field (e.g., "latest version" for a social media post)?
