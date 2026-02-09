@@ -1,115 +1,181 @@
 # Tasks: Glance Platform Global Foundation
 
 **Input**: Design documents from `/specs/plan/`
-**Prerequisites**: plan.md, spec.md, research.md, data-model.md, aggregated-data-model.sql
+**Prerequisites**: plan.md (required), spec.md (required for user stories), research.md, data-model.md, contracts/
 
-**Organization**: Tasks are grouped by phase and user story to ensure independent testability and incremental delivery.
+**Tests**: Testing is MANDATORY.
+- Unit Tests: Co-located with code, mock everything.
+- E2E Tests: Global flow, use Wiremock/remote mocks.
 
-## Phase 1: Setup (Project Initialization)
+**Organization**: Tasks are grouped by user story.
 
-**Purpose**: Establish the multi-module project structure and core configurations.
+## Format: `[ID] [P?] [Story] Description`
+
+- **[P]**: Can run in parallel (different files, no dependencies)
+- **[Story]**: Which user story this task belongs to (e.g., US1, US2, US3)
+- Include exact file paths in descriptions
+
+## Path Conventions
+
+- **Backend**: `backend/src/`
+- **Web**: `web/src/`
+- **Mobile**: `mobile/src/`
+
+## Phase 1: Setup (Shared Infrastructure)
+
+**Purpose**: Project initialization and basic structure.
 
 - [ ] T001 Create multi-module root structure (backend/, web/, mobile/)
-- [ ] T002 Initialize Backend (NodeJS) with TypeScript and Hexagonal structure
-- [ ] T003 Initialize Web (React) with Tailwind and basic routing
-- [ ] T004 Initialize Mobile (React Native) with basic navigation
-- [ ] T005 [P] Configure shared linting, formatting, and Husky hooks
-- [ ] T006 Configure Environment variables and Clerk Auth in all modules
-- [ ] T007 [P] Setup Vitest in Backend and Web, and Jest in Mobile
+- [ ] T002 Initialize NodeJS backend (Node 20+) with TypeScript and basic Hexagonal structure
+- [ ] T003 Initialize React web project (React 18+) with Tailwind CSS
+- [ ] T004 Initialize React Native mobile project with basic navigation
+- [ ] T005 [P] Configure shared linting (ESLint), formatting (Prettier), and Husky hooks
+- [x] T006 [P] Configure GitHub Actions CI workflow in `.github/workflows/ci.yml`
+- [ ] T007 [P] Setup Vitest in backend/ and web/ and Jest in mobile/
 
 ---
 
-## Phase 2: Foundational (Data & Auth)
+## Phase 2: Foundational (Blocking Prerequisites)
 
-**Purpose**: Core infrastructure required for all subsequent features.
+**Purpose**: Core infrastructure that MUST be complete before ANY user story can be implemented.
 
-- [ ] T008 Apply `specs/plan/aggregated-data-model.sql` to Supabase DB
-- [ ] T009 Implement Supabase Client and Database Adapter in `backend/src/infrastructure/database/`
-- [ ] T010 Implement Clerk Authentication Middleware in `backend/src/api/middleware/auth.ts`
-- [ ] T011 [P] Create Generic Domain Models (User, Source, ContentItem) in `backend/src/core/domain/`
-- [ ] T012 [P] Implement Base API Routing and Error Handling in `backend/src/api/`
+- [ ] T008 Apply `specs/plan/aggregated-data-model.sql` to Supabase/OrioleDB instance
+- [ ] T009 [P] Implement Supabase Client and Database Adapter in `backend/src/infrastructure/database/supabase.adapter.ts`
+- [ ] T010 [P] Implement Clerk Authentication Middleware in `backend/src/api/middleware/auth.ts`
+- [ ] T011 [P] Create Domain Entities (User, Source, ContentItem) in `backend/src/core/domain/entities/`
+- [ ] T012 [P] Implement Global Rate Limiting (Upstash) in `backend/src/api/middleware/rate-limit.ts`
+- [ ] T013 Configure environment management and error handling in `backend/src/core/config/`
 
----
-
-## Phase 3: [US 006-1] Unified Source Registration (Priority: P1)
-
-**Goal**: Allow users to register Repos, News, and Social sources through a single interface.
-
-- [ ] T013 [P] [US6] Create Source Repository and Service in `backend/src/core/services/source.service.ts`
-- [ ] T014 [US6] Implement `POST /api/v1/sources` for multi-provider registration in `backend/src/api/routes/sources.ts`
-- [ ] T015 [US6] Implement `GET /api/v1/sources` to list active subscriptions
-- [ ] T016 [US6] Create Unified Configuration Form in Web Admin (`web/src/features/sources/SourceForm.tsx`)
-- [ ] T017 [US6] Implement Dynamic Field Rendering based on Provider Type in Web UI
-
-**Checkpoint**: User can register and see different types of sources in the Web Admin.
+**Checkpoint**: Foundation ready - user story implementation can now begin in parallel.
 
 ---
 
-## Phase 4: [US 001-1] GitHub Metadata Ingestion (Priority: P1)
+## Phase 3: User Story 2 - Secure Authentication (Priority: P1) 🎯 MVP
 
-**Goal**: Fetch Issues, PRs, and Releases from GitHub without code download.
+**Goal**: Users can sign in securely via Clerk across all platforms.
 
-- [ ] T018 [P] [US1] Implement GitHub API Adapter in `backend/src/infrastructure/adapters/github.adapter.ts`
-- [ ] T019 [US1] Implement Ingestion Service for Repository type in `backend/src/core/services/ingestion.service.ts`
-- [ ] T020 [US1] Create Trigger Endpoint `POST /api/repos/import` in `backend/src/api/routes/repos.ts`
-- [ ] T021 [US1] Implement Background Ingestion Worker for Repositories (Recurrence logic)
+**Independent Test**: Verify that a JWT from Clerk is correctly validated by the backend and grants access to protected routes.
 
-**Checkpoint**: GitHub metadata is successfully fetched and stored in `content_items`.
+### Tests for User Story 2 (MANDATORY) ⚠️
 
----
+- [ ] T014 [P] [US2] Unit test for Auth Middleware in `backend/src/api/middleware/__tests__/auth.test.ts`
+- [ ] T015 [P] [US2] Unit test for Clerk Service in `backend/src/infrastructure/auth/__tests__/clerk.service.test.ts`
+- [ ] T016 [P] [US2] E2E test (mocked) for login flow in `web/src/features/auth/__tests__/login.e2e.ts`
 
-## Phase 5: [US 002-3] AI Enrichment Pipeline (Priority: P1)
+### Implementation for User Story 2
 
-**Goal**: Automatically summarize fetched items and calculate credibility/AI-tag.
+- [ ] T017 [P] [US2] Implement ClerkAuthService in `backend/src/infrastructure/auth/clerk.service.ts`
+- [ ] T018 [US2] Implement Identity verification endpoint `GET /api/v1/auth/me` in `backend/src/api/routes/auth.ts`
+- [ ] T019 [US2] Integrate Clerk Provider in Web root `web/src/main.tsx`
+- [ ] T020 [US2] Create Login Page and Auth Guard in `web/src/features/auth/AuthPage.tsx`
+- [ ] T021 [US2] Integrate Clerk into Mobile app in `mobile/src/App.tsx`
 
-- [ ] T022 [P] [US2] Implement AI Provider Adapter (OpenAI/Gemini) in `backend/src/infrastructure/adapters/ai.adapter.ts`
-- [ ] T023 [US2] Implement AI Enrichment Service for Summarization and Scoring
-- [ ] T024 [US2] Integrate AI Service into the Ingestion Pipeline (Step between Fetch and Save)
-- [ ] T025 [US2] Implement `GET /api/repos/{id}/summary` to retrieve generated summary
-
-**Checkpoint**: Ingested items now have AI-generated summaries and credibility scores.
+**Checkpoint**: User can log in on Web and Mobile, and the Backend recognizes their identity.
 
 ---
 
-## Phase 6: [US 002-4] Mobile Consumer Feed (Priority: P1)
+## Phase 4: User Story 6 - Unified Source Registration (Priority: P1)
+
+**Goal**: Users can register GitHub, News (RSS), and Social sources through a unified interface.
+
+**Independent Test**: User registers a GitHub repository and an RSS feed, then verifies they appear in their source list.
+
+### Tests for User Story 6 (MANDATORY) ⚠️
+
+- [ ] T022 [P] [US6] Unit test for SourceService in `backend/src/core/services/__tests__/source.service.test.ts`
+- [ ] T023 [P] [US6] E2E test (mocked) for source registration in `backend/tests/e2e/sources.spec.ts`
+
+### Implementation for User Story 6
+
+- [ ] T024 [P] [US6] Implement SourceRepository in `backend/src/infrastructure/database/source.repository.ts`
+- [ ] T025 [US6] Implement SourceService with validation logic in `backend/src/core/services/source.service.ts`
+- [ ] T026 [US6] Implement `POST /api/v1/sources` for multi-provider registration in `backend/src/api/routes/sources.ts`
+- [ ] T027 [US6] Implement `GET /api/v1/sources` in `backend/src/api/routes/sources.ts`
+- [ ] T028 [US6] Create Unified Configuration Form in `web/src/features/sources/SourceForm.tsx`
+- [ ] T029 [US6] Implement Source List View in `web/src/features/sources/SourceList.tsx`
+
+**Checkpoint**: Users can manage their technical data sources via the Web Admin.
+
+---
+
+## Phase 5: User Story 1 - GitHub Metadata Ingestion (Priority: P1)
+
+**Goal**: Automatically fetch Issues, PRs, and Releases from registered GitHub repositories.
+
+**Independent Test**: Manually trigger ingestion and verify that new items appear in the `content_items` table.
+
+### Tests for User Story 1 (MANDATORY) ⚠️
+
+- [ ] T030 [P] [US1] Unit test for GitHubAdapter in `backend/src/infrastructure/adapters/__tests__/github.adapter.test.ts`
+- [ ] T031 [P] [US1] Unit test for IngestionService in `backend/src/core/services/__tests__/ingestion.service.test.ts`
+
+### Implementation for User Story 1
+
+- [ ] T032 [P] [US1] Implement GitHubAdapter using Octokit in `backend/src/infrastructure/adapters/github.adapter.ts`
+- [ ] T033 [US1] Implement IngestionService (Fetch -> Normalize -> Save) in `backend/src/core/services/ingestion.service.ts`
+- [ ] T034 [US1] Implement Ingestion Background Worker in `backend/src/infrastructure/workers/ingestion.worker.ts`
+- [ ] T035 [US1] Implement `GET /api/v1/items` with pagination in `backend/src/api/routes/items.ts`
+
+**Checkpoint**: Technical data is successfully flowing into the system from GitHub.
+
+---
+
+## Phase 6: User Story 2 (Mobile) - Mobile Consumer Feed (Priority: P1)
 
 **Goal**: Display aggregated summaries on a read-only mobile app.
 
-- [ ] T026 [US2] Implement Unified Feed API `GET /api/feed` with pagination
-- [ ] T027 [US2] Create Feed Item UI Components in `mobile/src/components/FeedItem.tsx`
-- [ ] T028 [US2] Implement Read-Only Feed Screen with Pull-to-Refresh in `mobile/src/screens/FeedScreen.tsx`
-- [ ] T029 [US2] Implement Detail View showing Summary and Original Source Link
+**Independent Test**: Open the mobile app and see the list of technical items fetched from the backend.
 
-**Checkpoint**: Users can consume insights on their mobile devices.
+### Tests for User Story 2 (Mobile) (MANDATORY) ⚠️
+
+- [ ] T036 [P] [US2] Unit test for FeedScreen in `mobile/src/screens/__tests__/FeedScreen.test.tsx`
+
+### Implementation for User Story 2 (Mobile)
+
+- [ ] T037 [P] [US2] Create FeedItem UI component in `mobile/src/components/FeedItem.tsx`
+- [ ] T038 [US2] Implement FeedScreen with Pull-to-Refresh in `mobile/src/screens/FeedScreen.tsx`
+- [ ] T039 [US2] Implement Detail View showing original source link in `mobile/src/screens/DetailScreen.tsx`
+
+**Checkpoint**: End-to-end flow from GitHub to Mobile device is complete.
 
 ---
 
-## Phase 7: [US 003-2] Modular Connector Registry (Priority: P2)
+## Phase 7: User Story 2 (AI) - AI Enrichment Pipeline (Priority: P1)
 
-**Goal**: Ensure adding new providers (GitLab, X, etc.) requires minimal code changes.
+**Goal**: Automatically summarize fetched items using AI.
 
-- [ ] T030 [P] [US3] Refactor Ingestion Service to use the `IConnector` interface pattern
-- [ ] T031 [US3] Implement Registry Pattern for automatic discovery of new Provider Adapters
-- [ ] T032 [US3] Create "Dummy" Connector to verify modularity and standard configuration
+### Tests for User Story 2 (AI) (MANDATORY) ⚠️
+
+- [ ] T040 [P] [US2] Unit test for AIAdapter in `backend/src/infrastructure/adapters/__tests__/ai.adapter.test.ts`
+
+### Implementation for User Story 2 (AI)
+
+- [ ] T041 [P] [US2] Implement AIAdapter (Gemini/OpenAI) in `backend/src/infrastructure/adapters/ai.adapter.ts`
+- [ ] T042 [US2] Integrate AI summarization into IngestionService flow
 
 ---
 
 ## Phase 8: Polish & Cross-Cutting Concerns
 
-- [ ] T033 [P] Update OpenAPI specifications in `specs/plan/contracts/` for all new endpoints
-- [ ] T034 [P] Implement Backend Logging and Health Checks
-- [ ] T035 [P] Security Audit: Verify RLS policies and Auth scopes
-- [ ] T036 Final validation of `quickstart.md` setup steps
+- [ ] T043 [P] Update OpenAPI specifications in `specs/plan/contracts/openapi.yaml`
+- [ ] T044 [P] Update Mermaid diagrams in `specs/plan/` (Sequence, User Journey)
+- [ ] T045 Implement health checks and basic monitoring in `backend/src/api/routes/health.ts`
+- [ ] T046 Final validation of `quickstart.md` setup steps
+
+---
 
 ## Implementation Strategy
 
-1. **MVP (Phase 1-4)**: Focus on GitHub metadata ingestion and display.
-2. **Phase 5-6**: Add AI value and mobile consumption.
-3. **Phase 7**: Formalize the extensibility for future providers.
+1. **Phase 1-2 (Foundation)**: Establish the multi-module project structure and core infrastructure.
+2. **Phase 3 (Auth)**: Secure the platform.
+3. **Phase 4-5 (Ingestion MVP)**: Register sources and fetch GitHub data.
+4. **Phase 6 (Consumer App)**: Deliver the mobile experience.
+5. **Phase 7 (AI)**: Add summarization value.
 
 ## Dependencies
 
-- Phase 2 depends on Supabase/Clerk setup.
-- Phase 3-7 depend on Phase 2 (Foundation).
-- Phase 5 depends on items being available in DB (Phase 4).
-- Phase 6 depends on API and Data being ready (Phase 5).
+- Phase 2 depends on Supabase/Clerk credentials.
+- All User Story phases (3-7) depend on Phase 2 (Foundation).
+- Phase 5 (Ingestion) depends on Phase 4 (Source Registration).
+- Phase 6 (Mobile) depends on Phase 5 (Data availability).
+- Phase 7 (AI) depends on Phase 5 (Data availability).
