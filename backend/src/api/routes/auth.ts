@@ -1,11 +1,11 @@
 import { Router } from 'express';
-import { clerkAuthMiddleware } from '../middleware/auth.js';
+import { clerkAuthMiddleware, AuthRequest } from '../middleware/auth.js';
 
 const authRouter = Router();
 
-authRouter.get('/me', clerkAuthMiddleware, (req, res) => {
+authRouter.get('/me', clerkAuthMiddleware, (req: AuthRequest, res) => {
   res.json({
-    user: (req as any).auth,
+    user: req.auth,
   });
 });
 

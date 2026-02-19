@@ -19,7 +19,7 @@ export interface SourceProps {
   displayName: string;
   isActive?: boolean;
   recurrenceInterval?: string;
-  config?: Record<string, any>;
+  config?: Record<string, unknown>;
   lastFetchedAt?: Date;
   createdAt?: Date;
   updatedAt?: Date;
@@ -33,7 +33,7 @@ export class Source {
   private _displayName: string;
   private _isActive: boolean;
   private _recurrenceInterval: string;
-  private _config: Record<string, any>;
+  private _config: Record<string, unknown>;
   private _lastFetchedAt?: Date;
   private readonly _createdAt: Date;
   private _updatedAt: Date;
@@ -80,7 +80,7 @@ export class Source {
     return this._recurrenceInterval;
   }
 
-  get config(): Record<string, any> {
+  get config(): Record<string, unknown> {
     return this._config;
   }
 

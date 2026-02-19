@@ -10,7 +10,7 @@ export interface ContentItemProps {
   fetchedAt?: Date;
   trustLevel?: number;
   isAiGenerated?: boolean;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export class ContentItem {
@@ -25,7 +25,7 @@ export class ContentItem {
   private readonly _fetchedAt: Date;
   private readonly _trustLevel?: number;
   private readonly _isAiGenerated: boolean;
-  private readonly _metadata: Record<string, any>;
+  private readonly _metadata: Record<string, unknown>;
 
   constructor(props: ContentItemProps) {
     this._id = props.id;
@@ -90,7 +90,7 @@ export class ContentItem {
     return this._isAiGenerated;
   }
 
-  get metadata(): Record<string, any> {
+  get metadata(): Record<string, unknown> {
     return this._metadata;
   }
 }

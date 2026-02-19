@@ -5,7 +5,11 @@ import { UnauthorizedError } from '../../core/config/error-handling.js';
 
 const clerkClient = createClerkClient({ secretKey: env.CLERK_SECRET_KEY });
 
-export async function clerkAuthMiddleware(req: Request, res: Response, next: NextFunction) {
+export interface AuthRequest extends Request {
+  auth?: ReturnType<ReturnType<typeof createClerkClient>['authenticateRequest']> extends Promise<infer T> ? T extends { toAuth: () => infer A } ? A : any : any;
+}
+
+export async function clerkAuthMiddleware(req: AuthRequest, res: Response, next: NextFunction) {
   try {
     const sessionToken = req.headers.authorization?.split(' ')[1];
 
@@ -19,8 +23,8 @@ export async function clerkAuthMiddleware(req: Request, res: Response, next: Nex
       throw new UnauthorizedError('Invalid session token');
     }
 
-    // Attach auth data to request object if needed
-    (req as any).auth = requestState.toAuth();
+    // Attach auth data to request object
+    req.auth = requestState.toAuth();
 
     next();
   } catch (error) {

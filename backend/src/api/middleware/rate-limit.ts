@@ -1,8 +1,9 @@
 import { Redis } from '@upstash/redis';
 import { Ratelimit } from '@upstash/ratelimit';
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
 import { env } from '../../core/config/env.config.js';
 import { RateLimitError } from '../../core/config/error-handling.js';
+import { AuthRequest } from './auth.js';
 
 const redis = new Redis({
   url: env.UPSTASH_REDIS_REST_URL,
@@ -17,9 +18,9 @@ const ratelimit = new Ratelimit({
   prefix: '@upstash/ratelimit',
 });
 
-export async function rateLimitMiddleware(req: Request, res: Response, next: NextFunction) {
+export async function rateLimitMiddleware(req: AuthRequest, res: Response, next: NextFunction) {
   try {
-    const identifier = (req as any).auth?.userId || req.ip || 'anonymous';
+    const identifier = req.auth?.userId || req.ip || 'anonymous';
     const { success, limit, reset, remaining } = await ratelimit.limit(identifier);
 
     res.setHeader('X-RateLimit-Limit', limit);
