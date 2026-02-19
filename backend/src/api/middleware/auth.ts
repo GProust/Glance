@@ -5,7 +5,7 @@ import { UnauthorizedError } from '../../core/config/error-handling.js';
 
 const clerkClient = createClerkClient({ secretKey: env.CLERK_SECRET_KEY });
 
-type AuthData = Awaited<ReturnType<typeof clerkClient.authenticateRequest>> extends { toAuth: () => infer A } ? A : any;
+type AuthData = Awaited<ReturnType<typeof clerkClient.authenticateRequest>> extends { toAuth: () => infer A } ? A : unknown;
 
 export interface AuthRequest extends Request {
   auth?: AuthData;
