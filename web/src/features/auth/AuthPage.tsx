@@ -1,4 +1,4 @@
-import { SignIn, SignUp, SignedIn, SignedOut } from "@clerk/clerk-react";
+import { SignIn, SignedIn, SignedOut } from "@clerk/clerk-react";
 
 export default function AuthPage() {
   return (

@@ -1,5 +1,6 @@
 import { Router } from 'express';
-import { clerkAuthMiddleware, AuthRequest } from '../middleware/auth.js';
+import { clerkAuthMiddleware } from '../middleware/auth.js';
+import type { AuthRequest } from '../middleware/auth.js';
 
 const authRouter = Router();
 

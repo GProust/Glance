@@ -5,8 +5,10 @@ import { UnauthorizedError } from '../../core/config/error-handling.js';
 
 const clerkClient = createClerkClient({ secretKey: env.CLERK_SECRET_KEY });
 
+type AuthData = Awaited<ReturnType<typeof clerkClient.authenticateRequest>> extends { toAuth: () => infer A } ? A : any;
+
 export interface AuthRequest extends Request {
-  auth?: ReturnType<ReturnType<typeof createClerkClient>['authenticateRequest']> extends Promise<infer T> ? T extends { toAuth: () => infer A } ? A : unknown : unknown;
+  auth?: AuthData;
 }
 
 export async function clerkAuthMiddleware(req: AuthRequest, res: Response, next: NextFunction) {
