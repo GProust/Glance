@@ -66,8 +66,13 @@
 
 - [x] T017 [P] [US2] Implement ClerkAuthService in `backend/src/infrastructure/auth/clerk.service.ts`
 - [x] T018 [US2] Implement Identity verification endpoint `GET /api/v1/auth/me` in `backend/src/api/routes/auth.ts`
+<<<<<<< HEAD
 - [x] T019 [US2] Integrate Clerk Provider in Web root `web/src/main.tsx`
 - [x] T020 [US2] Create Login Page and Auth Guard in `web/src/features/auth/AuthPage.tsx`
+=======
+- [ ] T019 [US2] Integrate Clerk Provider in Web root `web/src/main.tsx`
+- [ ] T020 [US2] Create Login Page and Auth Guard in `web/src/features/auth/AuthPage.tsx`
+>>>>>>> 4d6bc76 (feat(backend): [004] [US2] Implement Clerk Auth Service and Identity Verification endpoint)
 - [ ] T021 [US2] Integrate Clerk into Mobile app in `mobile/src/App.tsx`
 
 **Checkpoint**: User can log in on Web and Mobile, and the Backend recognizes their identity.
