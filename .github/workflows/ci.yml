@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main, master, model/gemini ]
   pull_request:
-    branches: [ main, master ]
+    branches: [ main, master, model/gemini ]
 
 jobs:
   backend:
@@ -118,7 +118,7 @@ jobs:
 
       - name: Install dependencies
         if: steps.check_mobile.outputs.exists == 'true'
-        run: npm ci
+        run: npm install --legacy-peer-deps
         working-directory: mobile
 
       - name: Lint
