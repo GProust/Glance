@@ -1,4 +1,5 @@
-import { Router, Response } from 'express';
+import { Router } from 'express';
+import type { Response } from 'express';
 import { clerkAuthMiddleware } from '../middleware/auth.js';
 import type { AuthRequest } from '../middleware/auth.js';
 

@@ -1,6 +1,6 @@
 import { Redis } from '@upstash/redis';
 import { Ratelimit } from '@upstash/ratelimit';
-import { Response, NextFunction } from 'express';
+import type { Response, NextFunction } from 'express';
 import { env } from '../../core/config/env.config.js';
 import { RateLimitError } from '../../core/config/error-handling.js';
 import type { AuthRequest } from './auth.js';

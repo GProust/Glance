@@ -1,14 +1,12 @@
 import { createClerkClient } from '@clerk/backend';
-import { Request, Response, NextFunction } from 'express';
+import type { Request, Response, NextFunction } from 'express';
 import { env } from '../../core/config/env.config.js';
 import { UnauthorizedError } from '../../core/config/error-handling.js';
 
 const clerkClient = createClerkClient({ secretKey: env.CLERK_SECRET_KEY });
 
-type AuthData = Awaited<ReturnType<typeof clerkClient.authenticateRequest>> extends { toAuth: () => infer A } ? A : unknown;
-
 export interface AuthRequest extends Request {
-  auth?: AuthData;
+  auth?: any;
 }
 
 export async function clerkAuthMiddleware(req: AuthRequest, res: Response, next: NextFunction) {
@@ -21,7 +19,7 @@ export async function clerkAuthMiddleware(req: AuthRequest, res: Response, next:
 
     const requestState = await clerkClient.authenticateRequest(req);
 
-    if (requestState.isUnauthenticated) {
+    if (requestState.status === 'unauthenticated') {
       throw new UnauthorizedError('Invalid session token');
     }
 
