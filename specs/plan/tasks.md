@@ -25,13 +25,13 @@
 
 **Purpose**: Project initialization and basic structure.
 
-- [ ] T001 Create multi-module root structure (backend/, web/, mobile/)
-- [ ] T002 Initialize NodeJS backend (Node 20+) with TypeScript and basic Hexagonal structure
-- [ ] T003 Initialize React web project (React 18+) with Tailwind CSS
-- [ ] T004 Initialize React Native mobile project with basic navigation
-- [ ] T005 [P] Configure shared linting (ESLint), formatting (Prettier), and Husky hooks
+- [x] T001 Create multi-module root structure (backend/, web/, mobile/)
+- [x] T002 Initialize NodeJS backend (Node 20+) with TypeScript and basic Hexagonal structure
+- [x] T003 Initialize React web project (React 18+) with Tailwind CSS
+- [x] T004 Initialize React Native mobile project with basic navigation
+- [x] T005 [P] Configure shared linting (ESLint), formatting (Prettier), and Husky hooks
 - [x] T006 [P] Configure GitHub Actions CI workflow in `.github/workflows/ci.yml`
-- [ ] T007 [P] Setup Vitest in backend/ and web/ and Jest in mobile/
+- [x] T007 [P] Setup Vitest in backend/ and web/ and Jest in mobile/
 
 ---
 
@@ -40,11 +40,11 @@
 **Purpose**: Core infrastructure that MUST be complete before ANY user story can be implemented.
 
 - [ ] T008 Apply `specs/plan/aggregated-data-model.sql` to Supabase/OrioleDB instance
-- [ ] T009 [P] Implement Supabase Client and Database Adapter in `backend/src/infrastructure/database/supabase.adapter.ts`
-- [ ] T010 [P] Implement Clerk Authentication Middleware in `backend/src/api/middleware/auth.ts`
-- [ ] T011 [P] Create Domain Entities (User, Source, ContentItem) in `backend/src/core/domain/entities/`
-- [ ] T012 [P] Implement Global Rate Limiting (Upstash) in `backend/src/api/middleware/rate-limit.ts`
-- [ ] T013 Configure environment management and error handling in `backend/src/core/config/`
+- [x] T009 [P] Implement Supabase Client and Database Adapter in `backend/src/infrastructure/database/supabase.adapter.ts`
+- [x] T010 [P] Implement Clerk Authentication Middleware in `backend/src/api/middleware/auth.ts`
+- [x] T011 [P] Create Domain Entities (User, Source, ContentItem) in `backend/src/core/domain/entities/`
+- [x] T012 [P] Implement Global Rate Limiting (Upstash) in `backend/src/api/middleware/rate-limit.ts`
+- [x] T013 Configure environment management and error handling in `backend/src/core/config/`
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel.
 
@@ -64,10 +64,10 @@
 
 ### Implementation for User Story 2
 
-- [ ] T017 [P] [US2] Implement ClerkAuthService in `backend/src/infrastructure/auth/clerk.service.ts`
-- [ ] T018 [US2] Implement Identity verification endpoint `GET /api/v1/auth/me` in `backend/src/api/routes/auth.ts`
-- [ ] T019 [US2] Integrate Clerk Provider in Web root `web/src/main.tsx`
-- [ ] T020 [US2] Create Login Page and Auth Guard in `web/src/features/auth/AuthPage.tsx`
+- [x] T017 [P] [US2] Implement ClerkAuthService in `backend/src/infrastructure/auth/clerk.service.ts`
+- [x] T018 [US2] Implement Identity verification endpoint `GET /api/v1/auth/me` in `backend/src/api/routes/auth.ts`
+- [x] T019 [US2] Integrate Clerk Provider in Web root `web/src/main.tsx`
+- [x] T020 [US2] Create Login Page and Auth Guard in `web/src/features/auth/AuthPage.tsx`
 - [ ] T021 [US2] Integrate Clerk into Mobile app in `mobile/src/App.tsx`
 
 **Checkpoint**: User can log in on Web and Mobile, and the Backend recognizes their identity.
