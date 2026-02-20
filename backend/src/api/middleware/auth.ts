@@ -5,8 +5,13 @@ import { UnauthorizedError } from '../../core/config/error-handling.js';
 
 const clerkClient = createClerkClient({ secretKey: env.CLERK_SECRET_KEY });
 
+export interface AuthData {
+  userId: string | null;
+  [key: string]: unknown;
+}
+
 export interface AuthRequest extends Request {
-  auth?: any;
+  auth?: AuthData;
 }
 
 export async function clerkAuthMiddleware(req: Request, res: Response, next: NextFunction) {
@@ -24,7 +29,7 @@ export async function clerkAuthMiddleware(req: Request, res: Response, next: Nex
     }
 
     // Attach auth data to request object
-    (req as AuthRequest).auth = requestState.toAuth();
+    (req as AuthRequest).auth = requestState.toAuth() as unknown as AuthData;
 
     next();
   } catch (error) {
