@@ -22,7 +22,9 @@ export async function clerkAuthMiddleware(req: Request, res: Response, next: Nex
       throw new UnauthorizedError('No session token provided');
     }
 
-    const requestState = await clerkClient.authenticateRequest(req);
+    // Use any cast for clerk internal request type compatibility if needed
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const requestState = await clerkClient.authenticateRequest(req as any);
 
     if (requestState.isSignedIn === false) {
       throw new UnauthorizedError('Invalid session token');

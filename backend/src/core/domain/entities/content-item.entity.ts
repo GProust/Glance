@@ -1,29 +1,29 @@
 export interface ContentItemProps {
-  id?: string;
+  id?: string | undefined;
   sourceId: string;
   externalId: string;
-  originUrl?: string;
-  title?: string;
-  summary?: string;
-  rawContent?: string;
-  publishedAt?: Date;
-  fetchedAt?: Date;
-  trustLevel?: number;
-  isAiGenerated?: boolean;
-  metadata?: Record<string, unknown>;
+  originUrl?: string | undefined;
+  title?: string | undefined;
+  summary?: string | undefined;
+  rawContent?: string | undefined;
+  publishedAt?: Date | undefined;
+  fetchedAt?: Date | undefined;
+  trustLevel?: number | undefined;
+  isAiGenerated?: boolean | undefined;
+  metadata?: Record<string, unknown> | undefined;
 }
 
 export class ContentItem {
-  private readonly _id?: string;
+  private readonly _id?: string | undefined;
   private readonly _sourceId: string;
   private readonly _externalId: string;
-  private readonly _originUrl?: string;
-  private readonly _title?: string;
-  private readonly _summary?: string;
-  private readonly _rawContent?: string;
-  private readonly _publishedAt?: Date;
+  private readonly _originUrl?: string | undefined;
+  private readonly _title?: string | undefined;
+  private readonly _summary?: string | undefined;
+  private readonly _rawContent?: string | undefined;
+  private readonly _publishedAt?: Date | undefined;
   private readonly _fetchedAt: Date;
-  private readonly _trustLevel?: number;
+  private readonly _trustLevel?: number | undefined;
   private readonly _isAiGenerated: boolean;
   private readonly _metadata: Record<string, unknown>;
 

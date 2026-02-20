@@ -12,21 +12,21 @@ export enum SourceProvider {
 }
 
 export interface SourceProps {
-  id?: string;
+  id?: string | undefined;
   userId: string;
   type: SourceType;
   provider: SourceProvider;
   displayName: string;
-  isActive?: boolean;
-  recurrenceInterval?: string;
-  config?: Record<string, unknown>;
-  lastFetchedAt?: Date;
-  createdAt?: Date;
-  updatedAt?: Date;
+  isActive?: boolean | undefined;
+  recurrenceInterval?: string | undefined;
+  config?: Record<string, unknown> | undefined;
+  lastFetchedAt?: Date | undefined;
+  createdAt?: Date | undefined;
+  updatedAt?: Date | undefined;
 }
 
 export class Source {
-  private readonly _id?: string;
+  private readonly _id?: string | undefined;
   private readonly _userId: string;
   private readonly _type: SourceType;
   private readonly _provider: SourceProvider;
@@ -34,7 +34,7 @@ export class Source {
   private _isActive: boolean;
   private _recurrenceInterval: string;
   private _config: Record<string, unknown>;
-  private _lastFetchedAt?: Date;
+  private _lastFetchedAt?: Date | undefined;
   private readonly _createdAt: Date;
   private _updatedAt: Date;
 

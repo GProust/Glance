@@ -1,5 +1,5 @@
 import express from 'express';
-import type { Request, Response, NextFunction, RequestHandler } from 'express';
+import type { Request, Response, NextFunction } from 'express';
 import { env } from './core/config/env.config.js';
 import { authRouter } from './api/routes/auth.js';
 import { rateLimitMiddleware } from './api/middleware/rate-limit.js';
@@ -8,7 +8,8 @@ import { handleError } from './core/config/error-handling.js';
 const app = express();
 
 app.use(express.json());
-app.use(rateLimitMiddleware as RequestHandler);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+app.use(rateLimitMiddleware as any);
 
 app.use('/api/v1/auth', authRouter);
 
