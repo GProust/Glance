@@ -9,7 +9,7 @@ export interface AuthRequest extends Request {
   auth?: any;
 }
 
-export async function clerkAuthMiddleware(req: AuthRequest, res: Response, next: NextFunction) {
+export async function clerkAuthMiddleware(req: Request, res: Response, next: NextFunction) {
   try {
     const sessionToken = req.headers.authorization?.split(' ')[1];
 
@@ -19,12 +19,12 @@ export async function clerkAuthMiddleware(req: AuthRequest, res: Response, next:
 
     const requestState = await clerkClient.authenticateRequest(req);
 
-    if (requestState.status === 'unauthenticated') {
+    if (requestState.isSignedIn === false) {
       throw new UnauthorizedError('Invalid session token');
     }
 
     // Attach auth data to request object
-    req.auth = requestState.toAuth();
+    (req as AuthRequest).auth = requestState.toAuth();
 
     next();
   } catch (error) {
