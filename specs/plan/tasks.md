@@ -58,9 +58,9 @@
 
 ### Tests for User Story 2 (MANDATORY) ⚠️
 
-- [ ] T014 [P] [US2] Unit test for Auth Middleware in `backend/src/api/middleware/__tests__/auth.test.ts`
-- [ ] T015 [P] [US2] Unit test for Clerk Service in `backend/src/infrastructure/auth/__tests__/clerk.service.test.ts`
-- [ ] T016 [P] [US2] E2E test (mocked) for login flow in `web/src/features/auth/__tests__/login.e2e.ts`
+- [x] T014 [P] [US2] Unit test for Auth Middleware in `backend/src/api/middleware/__tests__/auth.test.ts`
+- [x] T015 [P] [US2] Unit test for Clerk Service in `backend/src/infrastructure/auth/__tests__/clerk.service.test.ts`
+- [x] T016 [P] [US2] E2E test (mocked) for login flow in `web/src/features/auth/__tests__/login.test.tsx`
 
 ### Implementation for User Story 2
 
@@ -68,7 +68,7 @@
 - [x] T018 [US2] Implement Identity verification endpoint `GET /api/v1/auth/me` in `backend/src/api/routes/auth.ts`
 - [x] T019 [US2] Integrate Clerk Provider in Web root `web/src/main.tsx`
 - [x] T020 [US2] Create Login Page and Auth Guard in `web/src/features/auth/AuthPage.tsx`
-- [ ] T021 [US2] Integrate Clerk into Mobile app in `mobile/src/App.tsx`
+- [x] T021 [US2] Integrate Clerk into Mobile app in `mobile/app/_layout.tsx`
 
 **Checkpoint**: User can log in on Web and Mobile, and the Backend recognizes their identity.
 
