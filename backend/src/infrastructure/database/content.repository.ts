@@ -1,4 +1,5 @@
 import { SupabaseAdapter } from './supabase.adapter.js';
+import type { NormalizedItem } from '../connectors/types.js';
 
 /**
  * A content item as exposed in the read-only feed, with a thin slice of its source.
@@ -39,6 +40,32 @@ export async function listFeedForUser(userId: string, { limit, offset }: FeedQue
 
   if (error) throw error;
   return (data ?? []) as unknown as FeedItem[];
+}
+
+/**
+ * Insert or update content items for a source, keyed by (source_id, external_id) so
+ * re-fetching is idempotent. Returns how many rows were written.
+ */
+export async function upsertContentItems(sourceId: string, items: NormalizedItem[]): Promise<number> {
+  if (items.length === 0) return 0;
+
+  const rows = items.map((i) => ({
+    source_id: sourceId,
+    external_id: i.external_id,
+    origin_url: i.origin_url ?? null,
+    title: i.title ?? null,
+    raw_content: i.raw_content ?? null,
+    published_at: i.published_at ?? null,
+    metadata: i.metadata ?? {},
+  }));
+
+  const { data, error } = await SupabaseAdapter.getInstance()
+    .from('content_items')
+    .upsert(rows, { onConflict: 'source_id,external_id' })
+    .select('id');
+
+  if (error) throw error;
+  return data?.length ?? 0;
 }
 
 /** Fetch a single feed item the user owns, or null if not found / not theirs. */

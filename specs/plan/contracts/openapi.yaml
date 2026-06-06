@@ -98,6 +98,29 @@ paths:
         '204': { description: Deleted }
         '404': { $ref: '#/components/responses/NotFound' }
 
+  /sources/{id}/fetch:
+    post:
+      summary: Trigger ingestion for a source now
+      description: Fetches the source's latest content via its connector and stores it (idempotent).
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Ingestion result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  fetched: { type: integer, description: Items returned by the provider }
+                  matched: { type: integer, description: Items left after tag filtering }
+                  stored: { type: integer, description: Items written (insert or update) }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
   /feed:
     get:
       summary: Read-only aggregated content feed (newest first)

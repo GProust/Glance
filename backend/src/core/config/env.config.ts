@@ -19,6 +19,9 @@ const envSchema = z.object({
 
   CLERK_SECRET_KEY: z.string().min(1),
 
+  // Optional GitHub token for higher API rate limits / private repos during ingestion.
+  GITHUB_TOKEN: z.string().optional(),
+
   // Upstash Redis for rate limiting. Optional: when absent, rate limiting is disabled
   // (handy for local dev). Both values must be present together to enable it.
   UPSTASH_REDIS_REST_URL: z.string().url().optional(),

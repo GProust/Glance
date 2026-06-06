@@ -84,6 +84,16 @@ export async function updateSource(userId: string, id: string, patch: UpdateSour
   return (data as SourceRow) ?? null;
 }
 
+/** Record that a source was just fetched (sets last_fetched_at = now). */
+export async function markFetched(id: string): Promise<void> {
+  const { error } = await SupabaseAdapter.getInstance()
+    .from('sources')
+    .update({ last_fetched_at: new Date().toISOString() })
+    .eq('id', id);
+
+  if (error) throw error;
+}
+
 /** Delete a source the user owns. Returns true if a row was removed. */
 export async function deleteSource(userId: string, id: string): Promise<boolean> {
   const { data, error } = await SupabaseAdapter.getInstance()

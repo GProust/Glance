@@ -6,6 +6,7 @@ import type { AuthRequest } from '../middleware/auth.js';
 import { BadRequestError, NotFoundError, UnauthorizedError } from '../../core/config/error-handling.js';
 import { getProvider, supportedProvidersLabel } from '../../core/providers/registry.js';
 import { ensureUserSynced } from '../../application/user.service.js';
+import { runIngestionForSource } from '../../application/ingestion.service.js';
 import {
   createSource,
   listSourcesForUser,
@@ -133,6 +134,18 @@ sourcesRouter.put('/:id', clerkAuthMiddleware, async (req: AuthRequest, res: Res
 
     const updated = await updateSource(userId, id, patch);
     res.json(updated);
+  } catch (error) {
+    next(error);
+  }
+});
+
+/** POST /api/v1/sources/:id/fetch — manually trigger ingestion for one source. */
+sourcesRouter.post('/:id/fetch', clerkAuthMiddleware, async (req: AuthRequest, res: Response, next: NextFunction) => {
+  try {
+    const source = await getSourceForUser(requireUserId(req), String(req.params.id));
+    if (!source) throw new NotFoundError('Source not found');
+    const result = await runIngestionForSource(source);
+    res.json(result);
   } catch (error) {
     next(error);
   }
