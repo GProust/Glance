@@ -2,6 +2,7 @@ import express from 'express';
 import type { Request, Response, NextFunction } from 'express';
 import { env } from './core/config/env.config.js';
 import { authRouter } from './api/routes/auth.js';
+import { feedRouter } from './api/routes/feed.js';
 import { rateLimitMiddleware } from './api/middleware/rate-limit.js';
 import { handleError } from './core/config/error-handling.js';
 
@@ -12,6 +13,7 @@ app.use(express.json());
 app.use(rateLimitMiddleware as any);
 
 app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/feed', feedRouter);
 
 // Global Error Handler
 app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
