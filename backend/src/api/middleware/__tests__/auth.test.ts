@@ -1,5 +1,4 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { createClerkClient } from '@clerk/backend';
 import { UnauthorizedError } from '../../../core/config/error-handling.js';
 
 const { mockClerkClientInstance } = vi.hoisted(() => ({

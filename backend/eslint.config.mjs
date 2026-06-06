@@ -16,6 +16,9 @@ export default tseslint.config(
     },
     rules: {
       '@typescript-eslint/no-explicit-any': 'warn',
+      // Allow intentionally-unused args/vars prefixed with `_`
+      // (e.g. Express error-handler middleware requires the 4-arg signature).
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
     },
   }
 );

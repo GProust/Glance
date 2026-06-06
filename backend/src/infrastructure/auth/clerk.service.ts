@@ -8,11 +8,11 @@ export class ClerkAuthService {
     return await clerkClient.users.getUser(userId);
   }
 
-  public async verifyToken(token: string) {
-    return await clerkClient.authenticateRequest({
-      headers: new Headers({
-        authorization: `Bearer ${token}`,
-      }),
-    });
+  public verifyToken(token: string): ReturnType<typeof clerkClient.authenticateRequest> {
+    return clerkClient.authenticateRequest(
+      new Request('http://localhost', {
+        headers: { authorization: `Bearer ${token}` },
+      })
+    );
   }
 }

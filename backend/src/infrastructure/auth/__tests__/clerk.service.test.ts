@@ -1,5 +1,4 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { createClerkClient } from '@clerk/backend';
 
 const { mockClerkClientInstance } = vi.hoisted(() => ({
   mockClerkClientInstance: {
