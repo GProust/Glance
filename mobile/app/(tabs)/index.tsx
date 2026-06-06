@@ -1,98 +1,125 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { useCallback, useEffect, useState } from 'react';
+import {
+  ActivityIndicator,
+  FlatList,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import * as WebBrowser from 'expo-web-browser';
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+import { useApi, type FeedItem } from '@/src/api';
 
-export default function HomeScreen() {
+function trustColor(score: number | null): string {
+  if (score === null) return '#9ca3af';
+  if (score >= 67) return '#16a34a';
+  if (score >= 34) return '#ca8a04';
+  return '#dc2626';
+}
+
+function Card({ item }: { item: FeedItem }) {
+  const onPress = () => {
+    if (item.origin_url) WebBrowser.openBrowserAsync(item.origin_url);
+  };
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+    <TouchableOpacity style={styles.card} onPress={onPress} disabled={!item.origin_url}>
+      <View style={styles.cardHeader}>
+        <Text style={styles.source} numberOfLines={1}>
+          {item.sources?.display_name ?? 'Unknown source'}
+        </Text>
+        <View style={styles.badges}>
+          {item.is_ai_generated ? (
+            <View style={[styles.badge, styles.aiBadge]}>
+              <Text style={styles.badgeText}>Likely AI</Text>
+            </View>
+          ) : null}
+          {item.trust_level !== null ? (
+            <View style={[styles.badge, { backgroundColor: trustColor(item.trust_level) }]}>
+              <Text style={styles.badgeText}>Trust {item.trust_level}</Text>
+            </View>
+          ) : null}
+        </View>
+      </View>
+      <Text style={styles.title}>{item.title ?? '(untitled)'}</Text>
+      {item.summary ? (
+        <Text style={styles.summary} numberOfLines={4}>
+          {item.summary}
+        </Text>
+      ) : null}
+    </TouchableOpacity>
+  );
+}
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+export default function FeedScreen() {
+  const api = useApi();
+  const [items, setItems] = useState<FeedItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const load = useCallback(async () => {
+    try {
+      setItems(await api.getFeed());
+      setError(null);
+    } catch (e) {
+      setError((e as Error).message);
+    }
+  }, [api]);
+
+  useEffect(() => {
+    void (async () => {
+      setLoading(true);
+      await load();
+      setLoading(false);
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await load();
+    setRefreshing(false);
+  }, [load]);
+
+  return (
+    <SafeAreaView style={styles.container} edges={['top']}>
+      <Text style={styles.heading}>Glance</Text>
+      {loading ? (
+        <ActivityIndicator style={styles.center} size="large" />
+      ) : (
+        <FlatList
+          data={items}
+          keyExtractor={(i) => i.id}
+          renderItem={({ item }) => <Card item={item} />}
+          contentContainerStyle={styles.list}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+          ListEmptyComponent={
+            <Text style={styles.empty}>
+              {error ?? 'No items yet. Add a source in the web admin and fetch it.'}
+            </Text>
+          }
+        />
+      )}
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
+  container: { flex: 1, backgroundColor: '#f9fafb' },
+  heading: { fontSize: 24, fontWeight: '800', paddingHorizontal: 16, paddingVertical: 12, color: '#111827' },
+  center: { marginTop: 40 },
+  list: { padding: 16, gap: 12 },
+  empty: { textAlign: 'center', color: '#6b7280', marginTop: 40, paddingHorizontal: 24 },
+  card: { backgroundColor: '#fff', borderRadius: 12, padding: 14, borderWidth: 1, borderColor: '#e5e7eb', gap: 6 },
+  cardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: 8 },
+  source: { flex: 1, fontSize: 12, color: '#6b7280', fontWeight: '600' },
+  badges: { flexDirection: 'row', gap: 6 },
+  badge: { borderRadius: 6, paddingHorizontal: 6, paddingVertical: 2 },
+  aiBadge: { backgroundColor: '#7c3aed' },
+  badgeText: { color: '#fff', fontSize: 10, fontWeight: '700' },
+  title: { fontSize: 16, fontWeight: '700', color: '#111827' },
+  summary: { fontSize: 14, color: '#374151', lineHeight: 20 },
 });
