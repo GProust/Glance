@@ -5,20 +5,32 @@ import { env } from '../../core/config/env.config.js';
 import { RateLimitError } from '../../core/config/error-handling.js';
 import type { AuthRequest } from './auth.js';
 
-const redis = new Redis({
-  url: env.UPSTASH_REDIS_REST_URL,
-  token: env.UPSTASH_REDIS_REST_TOKEN,
-});
+// Rate limiting is enabled only when both Upstash values are present. In local dev
+// without them, the middleware becomes a no-op so the backend still runs.
+const ratelimit =
+  env.UPSTASH_REDIS_REST_URL && env.UPSTASH_REDIS_REST_TOKEN
+    ? new Ratelimit({
+        redis: new Redis({
+          url: env.UPSTASH_REDIS_REST_URL,
+          token: env.UPSTASH_REDIS_REST_TOKEN,
+        }),
+        // 100 requests per minute, sliding window.
+        limiter: Ratelimit.slidingWindow(100, '1 m'),
+        analytics: true,
+        prefix: '@upstash/ratelimit',
+      })
+    : null;
 
-// Create a new ratelimiter, that allows 100 requests per 1 minute
-const ratelimit = new Ratelimit({
-  redis,
-  limiter: Ratelimit.slidingWindow(100, '1 m'),
-  analytics: true,
-  prefix: '@upstash/ratelimit',
-});
+if (!ratelimit) {
+  console.warn('[rate-limit] Upstash not configured — rate limiting is DISABLED.');
+}
 
 export async function rateLimitMiddleware(req: AuthRequest, res: Response, next: NextFunction) {
+  if (!ratelimit) {
+    next();
+    return;
+  }
+
   try {
     const identifier = req.auth?.userId || req.ip || 'anonymous';
     const { success, limit, reset, remaining } = await ratelimit.limit(identifier);
