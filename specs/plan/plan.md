@@ -1,6 +1,6 @@
 # Implementation Plan: Glance Platform Global Foundation
 
-**Branch**: `plan` | **Date**: 2026-02-07 | **Spec**: Multiple (001-006)
+**Scope**: Platform-wide foundation | **Date**: 2026-02-07 | **Specs**: 001–006
 **Input**: Consolidated feature specifications for GitHub analysis, News/Social aggregation, Multi-system extensibility, and Unified Provider Registration.
 
 ## Summary
@@ -38,13 +38,15 @@ This plan outlines the foundational architecture and data model for the Glance p
 
 ```text
 specs/plan/
-├── plan.md              # This file
-├── research.md          # Technology and pattern research
-├── data-model.md        # Global Supabase schema and entity relationships
-├── user-journey.md      # User journey map (Mermaid)
-├── sequence.md          # Ingestion pipeline flow (Mermaid)
-├── quickstart.md        # Environment setup and developer onboarding
-└── contracts/           # OpenAPI definitions
+├── plan.md                    # This file — consolidated implementation plan
+├── tasks.md                   # Phase 1–8 task tracker (T001–T046) — single source of truth
+├── research.md                # Technology and pattern decisions
+├── data-model.md              # Unified data model and entity relationships (Mermaid ERD)
+├── aggregated-data-model.sql  # Concrete PostgreSQL schema
+├── user-journey.md            # User journey map (Mermaid)
+├── sequence.md                # Ingestion pipeline flow (Mermaid)
+├── quickstart.md              # Environment setup and developer onboarding
+└── contracts/openapi.yaml     # API contract (OpenAPI 3.1)
 ```
 
 ### Source Code

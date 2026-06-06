@@ -1,2 +1,27 @@
+# Dependencies
+node_modules/
+backend/node_modules/
+web/node_modules/
+mobile/node_modules/
 
+# Build
+dist/
+backend/dist/
+web/dist/
+mobile/dist/
+
+# Env
+.env
+.env.*
+!.env.example
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Custom
 .ignore/

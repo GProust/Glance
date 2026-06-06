@@ -3,6 +3,7 @@
 **Feature Branch**: `002-glance-admin-news-mobile`  
 **Created**: 2026-02-01  
 **Status**: Draft  
+**Resolved decisions**: credibility scoring [D-002], mobile read-only scope [D-003], AI provider [D-004] — see [`../plan/decisions.md`](../plan/decisions.md).
 **Input**: User description: "The github part is only a piece, I would like a website to administrate the repo I am tracking on Github. Also I would like to have fetching of articles from news feed / or social media (Like X, LinkedIn) setup in the admin, with specific tags to retrieve them having an AI summary about it and the link to the article or post. All of those summary should be able to be displayed on a mobile app which will be read only. The articles / post should have a credibility score based on their srouce and if the information is relevant / corerct. It should be also tagged if the post / article is AI generated content"
 
 ## User Scenarios & Testing *(mandatory)*
