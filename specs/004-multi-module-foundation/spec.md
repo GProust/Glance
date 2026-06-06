@@ -1,8 +1,8 @@
 # Feature Specification: Multi-Module Foundation
 
-**Feature Branch**: `specifications` (targeting `004-multi-module-foundation`)
+**Feature ID**: `004-multi-module-foundation`
 **Created**: 2026-02-05
-**Status**: Draft
+**Status**: Foundation in progress — see [`../plan/tasks.md`](../plan/tasks.md) for status
 **Input**: "We would need to have 3 different modules, one for the backend, one for the mobile, and one for the web. The tech stack should respect the constitution file. The architecture of the apps should respect the best practices like hexagonal architecture, DDD, SOLID, KISS as much as possible. The datamodel should be quite generic to handle the different platform we will fetch the data. Also the API contract should consider authentication using a dedicated secure system which can be easily used on the backend. This can be handovered to a thirdparty with free plans. We should be secure protected against DDOS."
 
 ## User Scenarios & Testing *(mandatory)*
