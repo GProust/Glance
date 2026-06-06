@@ -68,6 +68,41 @@ export async function upsertContentItems(sourceId: string, items: NormalizedItem
   return data?.length ?? 0;
 }
 
+export interface UnenrichedItem {
+  id: string;
+  title: string | null;
+  raw_content: string | null;
+  origin_url: string | null;
+  metadata: Record<string, unknown>;
+}
+
+/** Items for a source that have not been summarized yet (summary IS NULL). */
+export async function listUnenrichedForSource(sourceId: string, limit: number): Promise<UnenrichedItem[]> {
+  const { data, error } = await SupabaseAdapter.getInstance()
+    .from('content_items')
+    .select('id, title, raw_content, origin_url, metadata')
+    .eq('source_id', sourceId)
+    .is('summary', null)
+    .order('published_at', { ascending: false, nullsFirst: false })
+    .limit(limit);
+
+  if (error) throw error;
+  return (data ?? []) as unknown as UnenrichedItem[];
+}
+
+export interface EnrichmentPatch {
+  summary: string;
+  is_ai_generated: boolean;
+  trust_level: number;
+  metadata: Record<string, unknown>;
+}
+
+/** Write enrichment results onto a content item. */
+export async function applyEnrichment(id: string, patch: EnrichmentPatch): Promise<void> {
+  const { error } = await SupabaseAdapter.getInstance().from('content_items').update(patch).eq('id', id);
+  if (error) throw error;
+}
+
 /** Fetch a single feed item the user owns, or null if not found / not theirs. */
 export async function getFeedItemForUser(userId: string, id: string): Promise<FeedItem | null> {
   const { data, error } = await SupabaseAdapter.getInstance()
