@@ -1,9 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-const { connector, upsertMock, markFetchedMock } = vi.hoisted(() => ({
+const { connector, upsertMock, markFetchedMock, enrichMock } = vi.hoisted(() => ({
   connector: { fetch: vi.fn() },
   upsertMock: vi.fn(),
   markFetchedMock: vi.fn(),
+  enrichMock: vi.fn(),
 }));
 
 vi.mock('../../infrastructure/connectors/index.js', () => ({
@@ -11,6 +12,7 @@ vi.mock('../../infrastructure/connectors/index.js', () => ({
 }));
 vi.mock('../../infrastructure/database/content.repository.js', () => ({ upsertContentItems: upsertMock }));
 vi.mock('../../infrastructure/database/source.repository.js', () => ({ markFetched: markFetchedMock }));
+vi.mock('../enrichment.service.js', () => ({ enrichSourceItems: enrichMock }));
 
 import { runIngestionForSource, filterByTags } from '../ingestion.service.js';
 
@@ -41,15 +43,17 @@ describe('runIngestionForSource', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     markFetchedMock.mockResolvedValue(undefined);
+    enrichMock.mockResolvedValue(0);
   });
 
   it('fetches, stores, marks fetched, and reports counts', async () => {
     connector.fetch.mockResolvedValue([item('1', 'a'), item('2', 'b')]);
     upsertMock.mockResolvedValue(2);
+    enrichMock.mockResolvedValue(2);
 
     const result = await runIngestionForSource(source());
 
-    expect(result).toEqual({ fetched: 2, matched: 2, stored: 2 });
+    expect(result).toEqual({ fetched: 2, matched: 2, stored: 2, enriched: 2 });
     expect(upsertMock).toHaveBeenCalledWith('s1', expect.arrayContaining([expect.objectContaining({ external_id: '1' })]));
     expect(markFetchedMock).toHaveBeenCalledWith('s1');
   });
@@ -60,7 +64,7 @@ describe('runIngestionForSource', () => {
 
     const result = await runIngestionForSource(source({ tags: ['typescript'] }));
 
-    expect(result).toEqual({ fetched: 2, matched: 1, stored: 1 });
+    expect(result).toEqual({ fetched: 2, matched: 1, stored: 1, enriched: 0 });
     expect(upsertMock.mock.calls[0]![1]).toHaveLength(1);
   });
 

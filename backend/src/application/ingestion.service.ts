@@ -3,11 +3,13 @@ import { getConnector, type NormalizedItem } from '../infrastructure/connectors/
 import type { SourceRow } from '../infrastructure/database/source.repository.js';
 import { markFetched } from '../infrastructure/database/source.repository.js';
 import { upsertContentItems } from '../infrastructure/database/content.repository.js';
+import { enrichSourceItems } from './enrichment.service.js';
 
 export interface IngestionResult {
   fetched: number;
   matched: number;
   stored: number;
+  enriched: number;
 }
 
 /** Keep only items mentioning at least one followed tag (case-insensitive). */
@@ -39,5 +41,13 @@ export async function runIngestionForSource(source: SourceRow): Promise<Ingestio
   const stored = await upsertContentItems(source.id, matched);
   await markFetched(source.id);
 
-  return { fetched: fetched.length, matched: matched.length, stored };
+  // Enrich newly stored items. Never let enrichment failures fail ingestion.
+  let enriched = 0;
+  try {
+    enriched = await enrichSourceItems(source);
+  } catch (err) {
+    console.warn(`[ingestion] enrichment skipped for ${source.id}: ${(err as Error).message}`);
+  }
+
+  return { fetched: fetched.length, matched: matched.length, stored, enriched };
 }

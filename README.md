@@ -10,8 +10,9 @@ from many providers (GitHub, RSS, and more), and presents AI-driven summaries ac
 - **Mobile** — React Native / Expo. Read-only consumer feed.
 
 > Status: foundation in progress. You can sign in, register GitHub/RSS sources, ingest
-> their content, and read it back via the feed API. AI enrichment and the mobile feed
-> screen are next — see [`specs/plan/tasks.md`](specs/plan/tasks.md).
+> their content (summarized + credibility-scored on the way in), and read it back via the
+> feed API. The mobile feed screen and scheduled ingestion are next — see
+> [`specs/plan/tasks.md`](specs/plan/tasks.md).
 
 ## Architecture
 
@@ -87,6 +88,7 @@ cp mobile/.env.example  mobile/.env
 | backend | `CLERK_SECRET_KEY` | Clerk → API Keys (secret) |
 | backend | `UPSTASH_REDIS_REST_URL` / `_TOKEN` | Upstash → REST API (optional) |
 | backend | `GITHUB_TOKEN` | GitHub → Developer settings → PAT (optional) |
+| backend | `GEMINI_API_KEY` / `GEMINI_MODEL` | Google AI Studio (optional — falls back to a local heuristic summarizer) |
 | web / mobile | `VITE_CLERK_PUBLISHABLE_KEY` / `EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY` | Clerk → API Keys (publishable) |
 | web | `VITE_API_BASE_URL` | Backend URL (defaults to `http://localhost:3000`) |
 

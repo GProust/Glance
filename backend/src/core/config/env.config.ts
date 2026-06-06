@@ -22,6 +22,12 @@ const envSchema = z.object({
   // Optional GitHub token for higher API rate limits / private repos during ingestion.
   GITHUB_TOKEN: z.string().optional(),
 
+  // Optional AI enrichment (Gemini). Without a key, enrichment falls back to a local
+  // heuristic summarizer. GEMINI_MODEL overrides the default model (the adapter still
+  // falls back to cheaper/Gemma models on quota errors).
+  GEMINI_API_KEY: z.string().optional(),
+  GEMINI_MODEL: z.string().optional(),
+
   // Upstash Redis for rate limiting. Optional: when absent, rate limiting is disabled
   // (handy for local dev). Both values must be present together to enable it.
   UPSTASH_REDIS_REST_URL: z.string().url().optional(),

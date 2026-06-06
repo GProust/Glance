@@ -118,6 +118,7 @@ paths:
                   fetched: { type: integer, description: Items returned by the provider }
                   matched: { type: integer, description: Items left after tag filtering }
                   stored: { type: integer, description: Items written (insert or update) }
+                  enriched: { type: integer, description: Items summarized/scored this run }
         '400': { $ref: '#/components/responses/BadRequest' }
         '404': { $ref: '#/components/responses/NotFound' }
 
