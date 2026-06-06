@@ -3,6 +3,7 @@
 **Feature Branch**: `006-unified-provider-registration`  
 **Created**: 2026-02-07  
 **Status**: Draft  
+**Resolved decisions**: MVP provider list = GitHub + RSS [D-001] — see [`../plan/decisions.md`](../plan/decisions.md).
 **Input**: User description: "We are missing the registration of the social media and news feed with the tags we want to follow to know which article to fetch and summarize. We should have a single configuration page for this, for repos / news feed / social media / or any other future provider. The information asked may differ, as for the repos it could be quite simple, which repo, and few configuration like how much to fetch information, the recurrence. For news, which news feed, what tags to follow, reccurence. For social media, which social media, who to follow, which tags. The idea is to have a quite open data model, which could be open to x different social media, y repository providers, z news feed."
 
 ## User Scenarios & Testing *(mandatory)*

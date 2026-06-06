@@ -42,9 +42,10 @@ because they are shared across all features.
 |----------|---------|
 | [plan.md](plan/plan.md) | Consolidated implementation plan & architecture |
 | [tasks.md](plan/tasks.md) | Phase 1–8 task tracker (T001–T046) — **current status lives here** |
+| [decisions.md](plan/decisions.md) | Resolved cross-cutting product/architecture decisions |
 | [research.md](plan/research.md) | Technology and pattern decisions |
 | [data-model.md](plan/data-model.md) | Unified data model + ERD (Mermaid) |
-| [aggregated-data-model.sql](plan/aggregated-data-model.sql) | Concrete PostgreSQL schema |
+| [aggregated-data-model.sql](plan/aggregated-data-model.sql) | Pointer → runnable schema (`backend/db/migrations/`) |
 | [contracts/openapi.yaml](plan/contracts/openapi.yaml) | API contract (OpenAPI 3.1) |
 | [sequence.md](plan/sequence.md) · [user-journey.md](plan/user-journey.md) | Mermaid diagrams |
 | [quickstart.md](plan/quickstart.md) | Environment setup & developer onboarding |
